@@ -1,9 +1,6 @@
 package decrypt
 
-import (
-	"io"
-	"os"
-)
+import "io"
 
 //Decrypting reader struct to automatically xor bytes with a key
 //in a circular fashion
@@ -14,7 +11,7 @@ type DecryptingReader struct {
 }
 
 //Implement the Read method automatically decrypting with the key
-func (d *DecryptingReader) Read(p []byte) (n int, err os.Error) {
+func (d *DecryptingReader) Read(p []byte) (n int, err error) {
 	n, err = d.r.Read(p)
 	for i := 0; i < n; i++ {
 		p[i] ^= d.key[d.n]
@@ -27,7 +24,6 @@ func (d *DecryptingReader) Read(p []byte) (n int, err os.Error) {
 func (d *DecryptingReader) Reset() {
 	d.n = 0
 }
-
 
 //Creates a new DecryptingReader
 func New(key string, r io.Reader) *DecryptingReader {
